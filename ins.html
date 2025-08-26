@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DSA Instructor</title>
+    <!-- ADDED: Google Font for a nicer typography -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500&display=swap" rel="stylesheet">
+    <style>
+        /* --- [SECTION 1: COMPLETE CSS REPLACEMENT] --- */
+        /* Replace your entire old <style> block with this new one. */
+        
+        :root {
+            --body-bg: #1a1a2e;
+            --chat-bg: #16213e;
+            --header-bg: linear-gradient(90deg, #e94560, #0f3460);
+            --user-msg-bg: #e94560;
+            --bot-msg-bg: #2a2a50;
+            --text-color: #e0e0e0;
+            --header-text: #ffffff;
+            --input-bg: #2a2a50;
+            --font-family: 'Poppins', sans-serif;
+        }
+
+        body {
+            font-family: var(--font-family);
+            background-color: var(--body-bg);
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            color: var(--text-color);
+        }
+        
+        .chat-container {
+            width: 90%;
+            max-width: 800px;
+            height: 95vh;
+            background-color: var(--chat-bg);
+            border-radius: 20px;
+            box-shadow: 0 15px 30px rgba(0,0,0,0.3);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            border: 1px solid #2a2a50;
+        }
+
+        .chat-header {
+            background: var(--header-bg);
+            color: var(--header-text);
+            padding: 20px;
+            text-align: center;
+            font-size: 1.6em;
+            font-weight: 500;
+            letter-spacing: 1px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+        }
+
+        .chat-box {
+            flex-grow: 1;
+            padding: 20px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        /* Styling for the scrollbar */
+        .chat-box::-webkit-scrollbar {
+            width: 8px;
+        }
+        .chat-box::-webkit-scrollbar-track {
+            background: var(--chat-bg);
+        }
+        .chat-box::-webkit-scrollbar-thumb {
+            background-color: #e94560;
+            border-radius: 20px;
+        }
+
+        .chat-message {
+            padding: 12px 18px;
+            border-radius: 18px;
+            max-width: 75%;
+            word-wrap: break-word;
+            animation: popIn 0.3s ease-out;
+        }
+
+        @keyframes popIn {
+            from {
+                opacity: 0;
+                transform: scale(0.8);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        .user-message {
+            background-color: var(--user-msg-bg);
+            color: var(--header-text);
+            align-self: flex-end;
+            border-bottom-right-radius: 4px;
+        }
+
+        .bot-message {
+            background-color: var(--bot-msg-bg);
+            color: var(--text-color);
+            align-self: flex-start;
+            border-bottom-left-radius: 4px;
+        }
+
+        .typing-indicator {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            padding: 12px 18px;
+        }
+        .typing-indicator span {
+            height: 8px;
+            width: 8px;
+            background-color: #9a9a9a;
+            border-radius: 50%;
+            display: inline-block;
+            animation: bounce 1.4s infinite ease-in-out both;
+        }
+        .typing-indicator .dot1 { animation-delay: -0.32s; }
+        .typing-indicator .dot2 { animation-delay: -0.16s; }
+        @keyframes bounce {
+            0%, 80%, 100% { transform: scale(0); }
+            40% { transform: scale(1.0); }
+        }
+
+
+        .chat-input {
+            display: flex;
+            padding: 20px;
+            border-top: 1px solid #2a2a50;
+        }
+
+        #userInput {
+            flex-grow: 1;
+            border: none;
+            background-color: var(--input-bg);
+            color: var(--text-color);
+            border-radius: 25px;
+            padding: 12px 20px;
+            font-size: 1em;
+            outline: none;
+            transition: box-shadow 0.3s;
+            font-family: var(--font-family);
+        }
+        #userInput:focus {
+            box-shadow: 0 0 0 2px #e94560;
+        }
+
+        #sendButton {
+            background-color: var(--user-msg-bg);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            margin-left: 10px;
+            cursor: pointer;
+            font-size: 1.5em;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transition: background-color 0.3s, transform 0.2s;
+        }
+        #sendButton:hover {
+            background-color: #d43d51;
+            transform: scale(1.1);
+        }
+        
+        pre {
+            background-color: rgba(0, 0, 0, 0.3);
+            padding: 1em;
+            border-radius: 8px;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+            font-family: "Courier New", Courier, monospace;
+            border: 1px solid #444;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="chat-container">
+        <div class="chat-header">
+            DSA Instructor
+        </div>
+        <div class="chat-box" id="chat-box">
+            <div class="chat-message bot-message">
+                Hello! I am your DSA Instructor. Ask me anything about Data Structures and Algorithms.
+            </div>
+            <!-- ADDED: The "typing" indicator, initially hidden -->
+            <div class="chat-message bot-message" id="typing-indicator" style="display: none;">
+                <div class="typing-indicator">
+                    <span class="dot1"></span>
+                    <span class="dot2"></span>
+                    <span class="dot3"></span>
+                </div>
+            </div>
+        </div>
+        <div class="chat-input">
+            <input type="text" id="userInput" placeholder="Ask about arrays, linked lists, etc...">
+            <button id="sendButton">
+                <!-- ADDED: SVG Icon for the send button -->
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-send"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
+            </button>
+        </div>
+    </div>
+
+    <script>
+        // --- [SECTION 2: JAVASCRIPT MODIFICATIONS] ---
+        // The core logic remains, but we add code to handle the typing indicator.
+
+        const chatBox = document.getElementById('chat-box');
+        const userInput = document.getElementById('userInput');
+        const sendButton = document.getElementById('sendButton');
+        // ADDED: A reference to the typing indicator element
+        const typingIndicator = document.getElementById('typing-indicator');
+
+        // IMPORTANT: Remember to replace this with your actual Gemini API Key
+        const API_KEY = "AIzaSyBJMuSVG2SG7xA4nwC5hH5e_oL9DeDhLrs";
+        const API_URL = "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent";
+
+        const sendMessage = async () => {
+            const userMessage = userInput.value.trim();
+            if (userMessage === '') return;
+
+            appendMessage(userMessage, 'user-message');
+            userInput.value = '';
+
+            // ADDED: Show the typing indicator before sending the request
+            typingIndicator.style.display = 'block';
+            chatBox.scrollTop = chatBox.scrollHeight;
+
+
+            try {
+                const response = await fetch(`${API_URL}?key=${API_KEY}`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        "contents": [{
+                            "parts": [{
+                                "text": userMessage
+                            }]
+                        }],
+                        "systemInstruction": {
+                            "parts": [
+                              {
+                                "text": `You are a Data structure and Algorithm Instructor. You will only reply to the problem related to Data structure and Algorithm. You have to solve query of user in simplest way and provide syntax where necessary. If user ask any question which is not related to Data structure and Algorithm, deny the request. Example: If user ask, How are you You will reply: Sorry, can you ask Data structure related questions. You have to reply him politely if question is not related to Data structure and Algorithm,like this message you can reply anything politely Else reply him politely with simple explanation.`
+                              }
+                            ]
+                        }
+                    })
+                });
+
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+
+                const data = await response.json();
+                const botMessage = data.candidates[0].content.parts[0].text;
+
+                // ADDED: Hide the indicator before appending the new message
+                typingIndicator.style.display = 'none';
+                appendMessage(botMessage, 'bot-message');
+
+            } catch (error) {
+                console.error("Error:", error);
+                // ADDED: Also hide the indicator on error
+                typingIndicator.style.display = 'none';
+                appendMessage("Sorry, I'm having trouble connecting. Please check the API key and try again.", 'bot-message');
+            }
+        };
+
+        const appendMessage = (message, className) => {
+            const messageElement = document.createElement('div');
+            messageElement.classList.add('chat-message', className);
+
+            // Simple markdown to HTML conversion for code blocks and bold text
+            let formattedMessage = message.replace(/\*\*(.*?)\*\*/g, '<b>$1</b>'); // Bold
+            formattedMessage = formattedMessage.replace(/```([\s\S]*?)```/g, '<pre><code>$1</code></pre>'); // Code blocks
+            
+            messageElement.innerHTML = formattedMessage;
+            chatBox.insertBefore(messageElement, typingIndicator); // Insert before indicator
+            chatBox.scrollTop = chatBox.scrollHeight;
+        };
+
+        sendButton.addEventListener('click', sendMessage);
+        userInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                sendMessage();
+            }
+        });
+    </script>
+
+</body>
+</html>
